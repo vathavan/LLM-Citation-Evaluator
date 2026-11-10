@@ -1,6 +1,6 @@
 # EvidenceCheck — Enhanced AI Explanation Verification Prototype
 
-**README prose word count:** approximately 430 (excluding commands, file tree and links).
+**README prose word count:** approximately 600 (excluding commands, file tree and links).
 
 ## Project status
 
