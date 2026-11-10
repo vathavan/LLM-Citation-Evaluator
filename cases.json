@@ -1,0 +1,48 @@
+[
+  {
+    "id": "photosynthesis",
+    "topic": "Biology",
+    "title": "Where does released oxygen come from?",
+    "explanation": "Plants use light energy to make sugars from carbon dioxide and water. Chlorophyll absorbs light during photosynthesis. The oxygen released by plants during photosynthesis comes from carbon dioxide.",
+    "claims": [
+      {"id":"p1","text":"Plants use light energy to make sugars from carbon dioxide and water."},
+      {"id":"p2","text":"Chlorophyll absorbs light during photosynthesis."},
+      {"id":"p3","text":"The oxygen released by plants during photosynthesis comes from carbon dioxide."}
+    ],
+    "correct_claim_id": "p3",
+    "sources": [
+      {"id":"ps1","claim_id":"p1","title":"OpenStax Biology 2e — Overview of Photosynthesis","url":"https://openstax.org/books/biology-2e/pages/8-1-overview-of-photosynthesis","summary":"Plants use carbon dioxide and water, with light energy, to make sugars."},
+      {"id":"ps2","claim_id":"p2","title":"OpenStax Biology 2e — Overview of Photosynthesis","url":"https://openstax.org/books/biology-2e/pages/8-1-overview-of-photosynthesis","summary":"Chlorophyll absorbs light energy used in photosynthesis."},
+      {"id":"ps3","claim_id":"p3","title":"OpenStax Biology 2e — Overview of Photosynthesis","url":"https://openstax.org/books/biology-2e/pages/8-1-overview-of-photosynthesis","summary":"The oxygen released in photosynthesis comes from water, not from carbon dioxide."}
+    ],
+    "feedback":"The third claim is incorrect. Water molecules are split during the light-dependent reactions, releasing oxygen. Carbon dioxide supplies carbon used in sugar production.",
+    "simulation_rules":[
+      {"keywords":["carbon dioxide","co2","absorbs"],"prompt":"You mentioned carbon dioxide. Compare the source's account of the released oxygen with the statement in the explanation. Which substance is identified as its origin?"},
+      {"keywords":["water","h2o"],"prompt":"You're focusing on water. Can you check the source passage to see what is released when water is split?"}
+    ],
+    "default_prompt":"What does the supporting passage say about where the released oxygen originates? Compare it with each claim."
+  },
+  {
+    "id":"seasons",
+    "topic":"Earth science",
+    "title":"What causes Earth's seasons?",
+    "explanation":"Earth travels around the Sun once a year. Earth's axis is tilted relative to its orbit. Summer occurs because Earth is much closer to the Sun during that season in each hemisphere.",
+    "claims":[
+      {"id":"s1","text":"Earth travels around the Sun once a year."},
+      {"id":"s2","text":"Earth's axis is tilted relative to its orbit."},
+      {"id":"s3","text":"Summer occurs because Earth is much closer to the Sun during that season in each hemisphere."}
+    ],
+    "correct_claim_id":"s3",
+    "sources":[
+      {"id":"ss1","claim_id":"s1","title":"NASA Space Place — What Causes the Seasons?","url":"https://spaceplace.nasa.gov/seasons/en/","summary":"Earth completes an orbit around the Sun in about one year."},
+      {"id":"ss2","claim_id":"s2","title":"NASA Space Place — What Causes the Seasons?","url":"https://spaceplace.nasa.gov/seasons/en/","summary":"Earth's axial tilt changes the angle and duration of sunlight at different times of year."},
+      {"id":"ss3","claim_id":"s3","title":"NASA Space Place — What Causes the Seasons?","url":"https://spaceplace.nasa.gov/seasons/en/","summary":"Seasons are primarily caused by Earth's axial tilt, rather than its changing distance from the Sun."}
+    ],
+    "feedback":"The third claim is incorrect. Earth's axial tilt changes the amount and angle of sunlight each hemisphere receives. Distance from the Sun is not the primary cause of seasons.",
+    "simulation_rules":[
+      {"keywords":["closer","distance","farther","nearer"],"prompt":"Think about the two hemispheres. When one has summer, what season does the other have? Does a distance explanation account for that?"},
+      {"keywords":["tilt","axis","angle"],"prompt":"You mentioned Earth's tilt. Check whether the source describes changing distance or changing sunlight angles and day length as the cause of seasons."}
+    ],
+    "default_prompt":"Compare the explanation of summer with NASA's description of axial tilt and sunlight. Do they agree?"
+  }
+]
