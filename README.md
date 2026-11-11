@@ -1,72 +1,135 @@
-# EvidenceCheck — Enhanced AI Explanation Verification Prototype
+# EvidenceCheck — AI Explanation Verification Prototype
 
-**README prose word count:** approximately 600 (excluding commands, file tree and links).
+**README prose word count:** Approximately 650 words, excluding commands and links.
 
 ## Project status
 
-A working browser prototype for students evaluating plausible but incorrect academic explanations. **Implemented:** two predefined learning cases; claim-level clickable citations; author-written source summaries; a reasoning box; a rule-based verification question; optional live AI verification question; error selection; confidence rating; deterministic scoring; and explanatory feedback. The evidence inspector and marking work with no API key. **Live AI is optional** and only works if the user supplies a valid OpenAI API key. A comparative study against a standard interface has **not** been implemented. No empirical improvement in student accuracy is claimed.
+EvidenceCheck is an intelligent interactive prototype designed to help students critically evaluate AI-generated explanations about unfamiliar academic topics.
+
+**Implemented:**
+- Two predefined academic cases containing deliberate factual errors.
+- Clickable claim-level citations and supporting source summaries.
+- Four-stage interface: Read & Inspect, Reflect, Decide and Review.
+- Student reasoning input and optional AI verification coaching.
+- Rule-based simulation mode without an API key.
+- Confidence rating and deterministic correctness feedback.
+- Contextual citation reminder that encourages students to inspect evidence before making a judgement.
+
+**Planned:** Multi-turn AI coaching, additional academic topics, usability testing and comparison with a standard interface.
+
+The prototype has not undergone a comparative user study. No improvement in student accuracy is claimed.
 
 ## Technology and architecture
 
-- Python 3 standard library HTTP server (`app.py`): serves static files and provides endpoints `/api/cases`, `/api/prompt`, `/api/grade`.
-- HTML, CSS and vanilla JavaScript (`index.html`, `static/`): browser interface and interaction state.
-- JSON (`cases.json`): predefined explanations, sources, answer keys, safe simulation rules and feedback.
-- Optional OpenAI Responses API (`OPENAI_MODEL`, default `gpt-4o-mini`): generates **one** source-directed verification question from student reasoning. It is not responsible for scoring.
-- Simulation: explicit keyword rules generate a relevant prompt **without AI**. The UI always labels this mode.
+- **Python 3:** Standard library HTTP server (`app.py`) with `/api/cases`, `/api/prompt` and `/api/grade` endpoints.
+- **HTML, CSS and JavaScript:** Browser interface, stage navigation and interaction tracking.
+- **JSON (`cases.json`):** Predefined explanations, source summaries, answer keys and feedback.
+- **Groq API:** Optional live AI verification coach using the `openai/gpt-oss-20b` model by default.
+- **Rule-based simulation:** Generates verification questions without external AI requests.
 
-The server removes answer keys and feedback from `/api/cases` until submission. This is an educational prototype, not a secure examination platform.
+The language model generates a contextual question using student reasoning and source information. It does not determine whether the student's answer is correct. Grading uses predefined ground truth.
 
-## Run locally
+The system currently implements a user-triggered, single-turn AI coaching cycle rather than a fully autonomous agent loop.
 
-Requires Python 3.10+; **no package installation** for simulation.
+## Running the prototype
+
+Requires Python 3.10 or later. No additional Python packages are required for simulation mode.
 
 ```bash
 python app.py
 ```
 
-Visit **http://localhost:8000**. To enable live AI, set a key in your terminal **without committing it**:
+Open http://localhost:8000.
 
-**macOS/Linux:**
-```bash
-export OPENAI_API_KEY="your-own-key"
-python app.py
-```
+To enable live AI, provide your own Groq API key as an environment variable.
 
 **Windows PowerShell:**
+
 ```powershell
-$env:OPENAI_API_KEY="your-own-key"
+$env:GROQ_API_KEY="your-own-key"
 python app.py
 ```
 
-Keys are read server-side. Never put them in browser JavaScript or GitHub. API calls may incur provider charges. If the AI request fails, the user is shown the error and may select simulation; there is no hidden fallback.
+**macOS/Linux:**
 
-## Inspect and test
+```bash
+export GROQ_API_KEY="your-own-key"
+python app.py
+```
 
-1. Pick a case and open one or more numbered citations.
-2. Write at least ten characters of reasoning; choose simulation or live AI and request a verification question.
-3. Select an incorrect claim and enter a confidence value.
-4. Submit to reveal the stored ground truth, explanation, and interaction summary.
+Never commit API keys to GitHub. Live AI requests may incur provider charges.
 
-Run unit tests:
+## How to use EvidenceCheck
+
+1. **Read & Inspect:** Select an academic topic, read the explanation and optionally inspect numbered citations.
+2. **Reflect:** Write initial reasoning and optionally request a verification question from the AI coach.
+3. **Decide:** Identify the incorrect claim and rate confidence from 0–100%.
+4. **Review:** Receive correctness feedback and review the evidence.
+
+If students attempt to proceed to the judgement stage without inspecting any citations, the system presents a dismissible verification reminder.
+
+Students can navigate backwards before submitting without losing their reasoning or source-inspection history.
+
+## Testing
+
+Run the automated tests:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-For this prototype, passages are **short paraphrased evidence summaries** with links to original sources, not verified quotations from precise source offsets. Validate sources and exact passage mappings before research deployment. Student reasoning sent in live mode is shared with the chosen AI provider; avoid personal data.
+Manual testing should verify stage navigation, citation inspection, the reminder, live AI requests and correctness feedback.
+
+Source passages are author-written summaries rather than verbatim quotations. Original sources should be checked before formal research use.
 
 ## Development record
 
-- **Commit 1 — backend:** fixed learning cases, per-claim source links, deterministic answer checking, and a bounded AI prompt endpoint. Rationale: ensure results have a known ground truth independent of model variability.
-- **Commit 2 — interface:** source-inspection panel, reasoning input, clearly labelled coach mode, confidence rating and feedback. Rationale: make the evidence and user control visible.
-- **Commit 3 — tests/docs:** document project scope, caveats, setup, AI assistance and runnable tests. Rationale: support independent inspection and reproducibility.
+**1. Initial backend and predefined cases**
 
-Find hashes with `git log --oneline`. The submission commit should be the last hash after your own review and changes. Publish to a **public GitHub repository** and place its URL in your report.
+Created academic explanations with deliberate errors, supporting citations and deterministic grading.
 
-## AI assistance and review
+*Rationale:* Maintain known ground truth independently of language-model variability.
 
-ChatGPT helped draft the application structure, UI, sample learning cases, bounded prompt instructions, README and tests. Code paths and automated tests were inspected locally. The sources are linked but the paraphrases still require independent cross-checking against the original pages; any model-generated question also requires human review before a formal user study. The project author must verify the final functionality and report claims.
+**2. Initial verification interface**
 
-## Potential future work
+Developed the explanation panel, source inspector, reasoning input, confidence rating and feedback.
 
-Add more vetted topics, precise source passage offsets, consent and anonymised usage logging, usability testing, and a controlled baseline-interface comparison. Avoid interpreting source clicks alone as proof of accurate evaluation.
+*Rationale:* Make evidence accessible and support independent student judgement.
+
+**3. Adaptive AI verification coach**
+
+Integrated Groq to generate contextual Socratic questions from student reasoning.
+
+*Rationale:* Provide guidance responsive to the student's thinking without revealing the answer.
+
+**4. Contextual citation reminder**
+
+Introduced a dismissible reminder when students attempt to proceed without inspecting evidence.
+
+*Rationale:* Encourage verification while preserving human agency and avoiding compulsory interaction.
+
+**5. Four-stage interface redesign**
+
+Reorganised the original scrolling interface into Read & Inspect, Reflect, Decide and Review.
+
+*Rationale:* Apply progressive disclosure to reduce cognitive load and clarify the interaction sequence.
+
+**Latest recorded commit:** `ff59158`
+
+[View commit](https://github.com/vathavan/LLM-Citation-Evaluator/commit/ff59158)
+
+## AI assistance
+
+ChatGPT was used to support application development, JavaScript debugging, interface redesign, prompt construction, documentation and report drafting.
+
+AI-generated suggestions were reviewed and adapted to the project's requirements, particularly the separation of AI coaching from deterministic grading and the decision to preserve optional source inspection.
+
+The application should be tested locally, and source summaries checked against their original references before formal evaluation.
+
+## Limitations and future work
+
+The prototype uses predefined cases rather than dynamically generated explanations. Citation inspection is recorded, but opening a source does not establish that the student understood or evaluated it correctly.
+
+A planned multi-turn agent loop could incorporate revised reasoning and citation-inspection history to provide further guidance. However, additional safeguards would be needed to prevent repetitive or misleading interventions.
+
+Future work also includes user testing, confidence-calibration analysis, additional verified source passages and a controlled comparison against a standard interface.
