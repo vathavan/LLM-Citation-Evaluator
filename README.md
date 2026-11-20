@@ -1,61 +1,50 @@
-EvidenceCheck 
-AI Explanation Verification Prototype
+# EvidenceCheck
 
-README prose word count: .
+**AI Explanation Verification Prototype**
 
-Project status
+README prose word count: [Insert final word count]
+
+## Project status
 
 EvidenceCheck is an intelligent interactive web application designed to help students critically evaluate AI-generated explanations about unfamiliar academic topics.
 
 The application provides two interface conditions using identical predefined explanations and answer keys.
 
-Standard interface
+### Standard interface
 
-Predefined academic explanations containing deliberate factual errors.
+- Predefined academic explanations containing deliberate factual errors.
+- Selection of the incorrect claim.
+- Confidence rating from 0–100%.
+- Deterministic correctness feedback.
 
-Selection of the incorrect claim.
+### Enhanced interface
 
-Confidence rating from 0–100%.
-
-Deterministic correctness feedback.
-
-Enhanced interface
-
-Clickable claim-level citations and supporting source summaries.
-
-Four stages: Read & Inspect, Reflect, Decide and Review.
-
-Student reasoning input and optional AI verification coaching.
-
-Contextual verification questions generated using a Groq-hosted LLM.
-
-Proactive citation reminder when students proceed without inspecting evidence.
-
-Confidence rating and deterministic correctness feedback.
-
-Reversible navigation before submission.
+- Clickable claim-level citations and supporting source summaries.
+- Four stages: Read & Inspect, Reflect, Decide and Review.
+- Student reasoning input and optional AI verification coaching.
+- Contextual verification questions generated using a Groq-hosted LLM.
+- Proactive citation reminder when students proceed without inspecting evidence.
+- Confidence rating and deterministic correctness feedback.
+- Reversible navigation before submission.
 
 The Enhanced interface is the main intelligent interactive contribution. The Standard interface provides a baseline for future evaluation.
 
-Planned: User-selected academic topics, dynamic evidence retrieval, multi-turn AI coaching and comparative user testing.
+**Planned:** User-selected academic topics, dynamic evidence retrieval, multi-turn AI coaching and comparative user testing.
 
-Technology and architecture
+## Technology and architecture
 
-Python 3: Standard-library HTTP server (app.py).
+- **Python 3:** Standard-library HTTP server (`app.py`).
+- **HTML, CSS and JavaScript:** Interface rendering, navigation and interaction tracking.
+- **JSON (`cases.json`):** Predefined explanations, supporting evidence, answer keys and feedback.
+- **Groq API:** Optional AI verification coaching using the `openai/gpt-oss-20b` model.
 
-HTML, CSS and JavaScript: Interface rendering, navigation and interaction tracking.
+### Backend endpoints
 
-JSON (cases.json): Predefined explanations, supporting evidence, answer keys and feedback.
-
-Groq API: Optional AI verification coaching using the openai/gpt-oss-20b model.
-
-Backend endpoints
-
-/api/cases — retrieves predefined academic cases.
-
-/api/grade — evaluates the student's selection against predefined ground truth.
-
-/api/prompt — generates a contextual AI verification question.
+| Endpoint | Purpose |
+| --- | --- |
+| `/api/cases` | Retrieves predefined academic cases. |
+| `/api/grade` | Evaluates the student's selection against predefined ground truth. |
+| `/api/prompt` | Generates a contextual AI verification question. |
 
 Both interfaces share case data and deterministic grading. Only the Enhanced interface uses AI coaching.
 
@@ -63,91 +52,90 @@ The model receives the student's reasoning, explanation and supporting source su
 
 The model does not determine correctness. The current design uses single-turn, student-initiated coaching rather than an autonomous agent loop.
 
-Running the application
+## Running the application
 
 Requires Python 3.10 or later. No additional Python packages are required.
 
-Start the server:
+### Start the server
 
+From the project directory, run:
+
+```bash
 python app.py
+```
 
-Open http://localhost:8000/.
+Open [http://localhost:8000/](http://localhost:8000/) in a web browser.
 
 Select either the Standard or Enhanced interface.
 
-Configure AI coaching
+### Configure AI coaching
 
 Provide your own Groq API key as an environment variable.
 
-Windows PowerShell:
+**Windows PowerShell:**
 
+```powershell
 $env:GROQ_API_KEY="your-own-key"
 python app.py
+```
 
-macOS/Linux:
+**macOS/Linux:**
 
+```bash
 export GROQ_API_KEY="your-own-key"
 python app.py
+```
 
 Never commit API keys to GitHub.
 
 AI coaching is optional. If the external AI service is unavailable, students can continue independently using the remaining functionality.
 
-How to use EvidenceCheck
+## How to use EvidenceCheck
 
-Standard interface
+### Standard interface
 
-Select an academic topic.
+1. Select an academic topic.
+2. Read the explanation.
+3. Identify the incorrect claim.
+4. Rate confidence.
+5. Submit and receive feedback.
 
-Read the explanation.
+### Enhanced interface
 
-Identify the incorrect claim.
-
-Rate confidence.
-
-Submit and receive feedback.
-
-Enhanced interface
-
-Read & Inspect: Read the explanation and optionally inspect numbered citations.
-
-Reflect: Enter initial reasoning and optionally request an AI-generated verification question.
-
-Decide: Identify the incorrect claim and rate confidence.
-
-Review: Receive correctness feedback and revisit supporting evidence.
+1. **Read & Inspect:** Read the explanation and optionally inspect numbered citations.
+2. **Reflect:** Enter initial reasoning and optionally request an AI-generated verification question.
+3. **Decide:** Identify the incorrect claim and rate confidence.
+4. **Review:** Receive correctness feedback and revisit supporting evidence.
 
 A proactive reminder appears if students attempt to enter Decide without opening citations. Students can review the evidence or continue anyway.
 
 Backward navigation allows students to reconsider their reasoning before submitting without losing their progress.
 
-Testing
+Source summaries are author-written paraphrases rather than verbatim quotations.
+
+## Testing
 
 Run the automated tests:
 
+```bash
 python -m unittest discover -s tests -v
+```
 
 Manual testing should verify:
 
-Standard and Enhanced interface routing.
-
-Consistent case content and grading.
-
-Citation inspection and tracking.
-
-Proactive reminders and dismissibility.
-
-Backward navigation and progress preservation.
-
-Live AI question generation.
-
-Independent task completion when AI coaching is unavailable.
-
-Source summaries are author-written paraphrases rather than verbatim quotations.
+- Standard and Enhanced interface routing.
+- Consistent case content and grading.
+- Citation inspection and tracking.
+- Proactive reminders and dismissibility.
+- Backward navigation and progress preservation.
+- Live AI question generation.
+- Independent task completion when AI coaching is unavailable.
 
 ## Development record
 
 The development of EvidenceCheck was informed by my Assignment 1 literature review, module concepts and lecturer feedback emphasising human-in-the-loop interaction, visibility, reversibility and the importance of excluding unnecessary functionality.
+
+Subsequent lecturer feedback confirmed the suitability of the proposed contribution and recommended focusing on the design of the Enhanced interface, using module concepts to justify decisions through use cases.
 
 ### 1. Predefined cases and deterministic grading
 
@@ -196,7 +184,7 @@ The development of EvidenceCheck was informed by my Assignment 1 literature revi
 
 **Change:** Reorganised the original scrolling interface into four stages: Read & Inspect, Reflect, Decide and Review. Added visible progress indicators and backward navigation.
 
-**Rationale:** Presenting one task at a time reduces competing information and unnecessary cognitive load. Lecturer feedback emphasising visibility and reversibility informed the provision of progress indicators and opportunities to reconsider reasoning before submission.
+**Rationale:** Presenting one task at a time reduces competing information and is intended to reduce unnecessary cognitive load. Lecturer feedback emphasising visibility and reversibility informed the provision of progress indicators and opportunities to reconsider reasoning before submission.
 
 **Checks:** Navigate between stages and verify that reasoning, citation-inspection history, claim selection and confidence are preserved appropriately before submission.
 
@@ -209,7 +197,7 @@ The development of EvidenceCheck was informed by my Assignment 1 literature revi
 
 **Change:** Introduced an interface-selection page and a Standard interface that shares the same academic cases, confidence ratings and deterministic grading as the Enhanced interface.
 
-**Rationale:** Provide a baseline for comparison without duplicating the assessment backend. The Enhanced interface remains the main intelligent interactive contribution.
+**Rationale:** Provide a baseline for comparison without duplicating the assessment backend. Following lecturer feedback, the Enhanced interface remains the main intelligent interactive contribution.
 
 **Checks:** Verify that both interfaces load successfully, present identical case content and provide consistent correctness feedback for identical selections.
 
@@ -237,18 +225,19 @@ The development of EvidenceCheck was informed by my Assignment 1 literature revi
 
 ## AI assistance
 
-AI was used to support application development, debugging, interface design, prompt construction, documentation and report drafting.
+ChatGPT was used to support application development, debugging, interface design, prompt construction, documentation and report drafting.
 
 | Task | AI assistance | Application and adaptation | Verification |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Backend development | Assistance with Python endpoints, case data and grading logic. | Retained deterministic grading to separate correctness assessment from AI coaching. | Check grading against predefined answer keys and run automated tests. |
 | AI verification coaching | Assistance with Groq API integration. | Restricted the intended coaching role to brief contextual questions rather than providing answers. | Inspect generated questions for relevance and unintended answer disclosure. |
 | Interface development | Suggestions for HTML, CSS, JavaScript, staged navigation and interaction tracking. | Adapted the interface to provide four stages, reversible navigation and optional guidance. | Check navigation, state preservation and citation tracking. |
-| Documentation and storyboards | Assistance with README organisation and storyboard illustrations. | Created my own storyboard and scenario but asked AI to make it more visually aesthetic | Compared illustrations against the final application and ensured it hadn't added anything or removed anything from the README. |
+| Documentation and storyboards | Assistance with README organisation and storyboard illustrations. | Created my own storyboards and scenarios but used AI to improve their visual presentation. | Compared illustrations against the final application and checked that README revisions preserved the intended content. |
 
 AI-generated suggestions were treated as development assistance rather than automatically accepted solutions. Final design decisions remained my responsibility.
 
 ## Limitations and future work
+
 EvidenceCheck currently uses two predefined academic cases, providing consistent ground truth but limiting the range of learning topics. Citation inspection is recorded, although opening a citation does not demonstrate that the student understood its evidence.
 
 LLM-generated verification questions may vary in quality despite prompt constraints. Future development could introduce additional output validation to identify unsuitable questions before displaying them.
