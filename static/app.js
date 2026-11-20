@@ -288,10 +288,9 @@ $('promptBtn').addEventListener('click', async () => {
 
   try {
     const data = await request('/api/prompt', {
-      case_id: caseId,
-      reasoning,
-      mode: $('modeSelect').value
-    });
+    case_id: caseId,
+    reasoning
+});
 
     // Ignore responses from an activity that was restarted.
     if (version !== activityVersion) return;
@@ -305,11 +304,13 @@ $('promptBtn').addEventListener('click', async () => {
     coached = true;
   } catch (error) {
     if (version === activityVersion) {
-      $('coachStatus').textContent = error.message;
-    }
+        $('coachStatus').textContent =
+    'AI coaching is currently unavailable. ' +
+    'You can inspect the evidence and continue independently.';
+        }
   } finally {
     if (version === activityVersion) {
-      $('promptBtn').disabled = false;
+      $('promptBtn').disabled = coached;
     }
   }
 });
@@ -412,12 +413,7 @@ $('caseSelect').addEventListener('change', loadCase);
       $('caseSelect').append(option);
     });
 
-    if (!data.ai_available) {
-      $('modeSelect').querySelector(
-        '[value="live"]'
-      ).textContent =
-        'Live AI (requires API key — not configured)';
-    }
+    
 
     loadCase();
   } catch (error) {

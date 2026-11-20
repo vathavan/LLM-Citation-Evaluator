@@ -12,13 +12,7 @@ CASES = json.loads((ROOT / 'cases.json').read_text(encoding='utf-8'))
 INDEX = {c['id']: c for c in CASES}
 
 
-def simulate_prompt(case, reasoning):
-    """Demonstration fallback: transparent deterministic cue matching, NOT AI."""
-    lower = reasoning.lower()
-    for rule in case['simulation_rules']:
-        if any(word in lower for word in rule['keywords']):
-            return rule['prompt']
-    return case['default_prompt']
+
 
 
 
@@ -26,7 +20,7 @@ def ai_prompt(case, reasoning):
     key = os.environ.get('GROQ_API_KEY', '').strip()
     if not key:
         raise ValueError(
-            'Live AI is not configured. Set GROQ_API_KEY or select Simulation.'
+            'AI coaching is unavailable. You can continue independently.'
         )
     model = os.environ.get('GROQ_MODEL', 'openai/gpt-oss-20b')
     instructions = (
@@ -103,7 +97,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def do_GET(self):
-        paths = {'/': ROOT / 'index.html', '/static/app.js': ROOT / 'static/app.js',
+        paths = {'/': ROOT / 'choose.html', '/choose': ROOT / 'choose.html', '/standard': ROOT / 'standard.html', '/enhanced': ROOT / 'index.html', '/static/app.js': ROOT / 'static/app.js',
                  '/static/style.css': ROOT / 'static/style.css'}
         if self.path == '/api/cases':
             public = [{k: v for k, v in case.items() if k not in
@@ -135,15 +129,8 @@ class Handler(BaseHTTPRequestHandler):
                 reasoning = value.get('reasoning', '')
                 if not isinstance(reasoning, str) or not 10 <= len(reasoning.strip()) <= 1200:
                     return self.respond(400, {'error': 'Write 10–1200 characters of reasoning.'})
-                mode = value.get('mode')
-                if mode not in ('simulation', 'live'):
-                    return self.respond(400, {'error': 'Choose a valid prompt mode.'})
-                if mode == 'simulation':
-                    prompt = simulate_prompt(case, reasoning)
-                    label = 'Rule-based simulation (not AI)'
-                else:
-                    prompt = ai_prompt(case, reasoning)
-                    label = 'Live AI-generated question'
+                prompt = ai_prompt(case, reasoning)
+                label = 'LiveAI-generated question'
                 return self.respond(200, {'prompt': prompt, 'mode_label': label})
             choice = value.get('claim_id')
             confidence = value.get('confidence')

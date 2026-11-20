@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EvidenceCheck — Standard Interface</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#1b2940;background:#f5f7fc}*{box-sizing:border-box}body{margin:0}header{background:#fff;border-bottom:1px solid #e3e9f3;padding:17px max(24px,calc((100vw - 1060px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:800;font-size:19px}.brand-mark{display:inline-grid;place-items:center;width:29px;height:29px;background:#243f86;color:#fff;border-radius:9px;margin-right:10px}.tag{font-size:11px;font-weight:800;letter-spacing:.09em;color:#596780;background:#edf1f8;padding:8px 12px;border-radius:99px}.wrapper{max-width:1060px;margin:auto;padding:42px 24px 72px}a{color:#2655a4}nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:24px;font-size:13px}nav a{text-decoration:none;border:1px solid #d5deed;border-radius:7px;padding:9px 14px;background:white}nav a[aria-current]{background:#203e83;color:white;border-color:#203e83}nav span{color:#66748a}.eyebrow{font-size:12px;color:#526e9a;text-transform:uppercase;font-weight:800;letter-spacing:.1em;margin-bottom:12px}h1{font-size:clamp(28px,4vw,43px);line-height:1.17;margin:0 0 13px;letter-spacing:-.025em}h1 em{font-style:normal;color:#265aaf}.subtitle{line-height:1.6;max-width:730px;color:#66738a;margin:0 0 30px}.toolbar{display:flex;align-items:end;gap:16px;flex-wrap:wrap;background:white;border:1px solid #e0e7f2;padding:20px;border-radius:13px;margin-bottom:22px}label.field{display:block;font-weight:750;font-size:12px;letter-spacing:.05em;color:#546077;margin-bottom:8px}select{font:inherit;max-width:100%;min-width:270px;padding:11px 12px;border-radius:8px;border:1px solid #cbd4e5;background:white}.card{background:white;border:1px solid #dfe6f0;border-radius:14px;box-shadow:0 7px 23px rgba(34,61,105,.045);padding:29px;margin:0 0 20px}.card h2{font-size:24px;margin:0 0 16px}.info{background:#f3f6fb;border-left:3px solid #6790d0;padding:14px 17px;border-radius:5px;line-height:1.7;font-size:16px;margin:0}.helper{font-size:14px;color:#64738a;margin:0 0 16px;line-height:1.55}.choice{display:block;border:1px solid #dbe3ef;border-radius:9px;padding:15px;margin-bottom:10px;line-height:1.55;cursor:pointer}.choice:has(input:checked){border-color:#466ac2;background:#f0f5ff}.choice input{accent-color:#335ab0;margin-right:12px}input[type=range]{accent-color:#345db9;width:100%}.range-head{display:flex;justify-content:space-between;gap:10px;margin:26px 0 11px}.range-head strong{font-variant-numeric:tabular-nums}.muted{color:#64738a;font-size:13px}.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:25px}button{cursor:pointer;background:#2454a6;color:white;padding:12px 20px;font-weight:750;border:none;border-radius:8px;font-size:14px}button.secondary{background:white;color:#34537f;border:1px solid #cad4e7}button:disabled{opacity:.52;cursor:not-allowed}.correct{padding:16px 19px;background:#eff8f2;border:1px solid #cae8d6;color:#21543a;border-radius:9px}.incorrect{padding:16px 19px;background:#fff6ec;border:1px solid #f1d8b9;color:#7a4b1e;border-radius:9px}.result p{line-height:1.65}.hidden{display:none!important}#error{color:#a92734;font-weight:650;min-height:1.3em}footer{font-size:12px;color:#738096;padding-top:10px}fieldset{border:0;padding:0;margin:0}legend{font-weight:700;margin-bottom:15px}@media(max-width:600px){.wrapper{padding:28px 15px}header{padding:15px}.card{padding:20px}.tag{display:none}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span class="brand-mark">✓</span>EvidenceCheck</div><span class="tag">STANDARD INTERFACE</span></header>
+<main class="wrapper">
+<nav aria-label="Interface comparison"><a href="/">← Choose interface</a><a href="/standard" aria-current="page">Standard</a><a href="/enhanced">Enhanced</a><span>Comparison prototype</span></nav>
+<div class="eyebrow">AI EXPLANATION EVALUATION</div><h1>Read an explanation.<br><em>Make your judgement.</em></h1><p class="subtitle">Read the academic explanation below, then identify which claim is inaccurate. This standard version does not provide supporting citations or verification guidance.</p>
+<section class="toolbar"><div><label class="field" for="caseSelect">ACADEMIC TOPIC</label><select id="caseSelect" aria-label="Academic topic"><option>Loading topics…</option></select></div><button class="secondary" id="restart" type="button">↻ Restart activity</button></section>
+<section class="card"><div class="eyebrow">THE EXPLANATION</div><h2 id="caseTitle">Loading explanation…</h2><p class="helper">The explanation may contain one factual inaccuracy.</p><p class="info" id="explanation"></p></section>
+<section class="card" id="decision"><div class="eyebrow">YOUR JUDGEMENT</div><form id="answerForm"><fieldset><legend>Which claim is incorrect?</legend><div id="claimOptions"></div></fieldset><div class="range-head"><label for="confidence"><strong>How confident are you?</strong><span class="muted"> — 0 to 100%</span></label><strong id="confidenceValue">50%</strong></div><input id="confidence" type="range" min="0" max="100" step="1" value="50"><div class="actions"><button id="submitButton" type="submit">Submit judgement →</button><span id="error" aria-live="polite"></span></div></form></section>
+<section class="card result hidden" id="results" aria-live="polite"><div class="eyebrow">YOUR RESULTS</div><h2 id="resultTitle"></h2><div id="resultStatus"></div><p id="resultFeedback"></p><p class="muted" id="resultConfidence"></p><div class="actions"><button class="secondary" id="tryAgain" type="button">↻ Restart activity</button><a href="/">Compare interfaces</a></div></section>
+<footer>Standard comparison condition · Same predefined cases and deterministic grading as the enhanced interface.</footer>
+</main>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const state = { cases: [], current: null };
+const controls = { select: $('caseSelect'), options: $('claimOptions'), explanation: $('explanation') };
+function text(el, value) { el.textContent = String(value ?? ''); }
+function reset() {
+  $('confidence').value = '50'; text($('confidenceValue'), '50%');
+  $('results').classList.add('hidden'); $('decision').classList.remove('hidden');
+  $('answerForm').reset(); text($('error'), '');
+}
+function renderCase() {
+  state.current = state.cases.find(c => c.id === controls.select.value);
+  if (!state.current) return;
+  reset(); text($('caseTitle'), state.current.title); text(controls.explanation, state.current.explanation);
+  controls.options.replaceChildren();
+  state.current.claims.forEach((claim, i) => {
+    const label = document.createElement('label'); label.className = 'choice';
+    const input = document.createElement('input'); input.type = 'radio'; input.name = 'claim'; input.value = claim.id; input.required = true;
+    const span = document.createElement('span'); text(span, `Claim ${i+1}: ${claim.text}`);
+    label.append(input, span); controls.options.append(label);
+  });
+}
+async function loadCases() {
+  try {
+    const response = await fetch('/api/cases');
+    if (!response.ok) throw new Error('Could not retrieve academic cases.');
+    const data = await response.json();
+    if (!Array.isArray(data.cases) || !data.cases.length) throw new Error('No academic cases available.');
+    state.cases = data.cases;
+    controls.select.replaceChildren();
+    state.cases.forEach(c => {const option = document.createElement('option'); option.value = c.id; text(option, `${c.topic} — ${c.title}`); controls.select.append(option);});
+    renderCase();
+  } catch (err) {text($('caseTitle'), 'Unable to load the activity'); text($('error'), err.message);}
+}
+$('confidence').addEventListener('input', event => text($('confidenceValue'), `${event.target.value}%`));
+controls.select.addEventListener('change', renderCase);
+$('restart').addEventListener('click', renderCase);
+$('tryAgain').addEventListener('click', renderCase);
+$('answerForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  const selected = document.querySelector('input[name="claim"]:checked');
+  if (!selected || !state.current) {text($('error'), 'Please select an incorrect claim.');return;}
+  const submit = $('submitButton'); submit.disabled = true; text($('error'), '');
+  try {
+    const res = await fetch('/api/grade', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({case_id: state.current.id, claim_id: selected.value, confidence: Number($('confidence').value)})});
+    const result = await res.json(); if (!res.ok) throw new Error(result.error || 'Could not submit judgement.');
+    const answerIndex = state.current.claims.findIndex(c => c.id === result.correct_claim_id);
+    const rightClaim = state.current.claims[answerIndex];
+    text($('resultTitle'), result.correct ? 'Correctly identified' : 'Not quite — review the explanation');
+    const status = $('resultStatus'); status.className = result.correct ? 'correct' : 'incorrect';
+    text(status, result.correct ? 'You identified the incorrect claim.' : `You selected a different claim. The incorrect statement was Claim ${answerIndex+1}: ${rightClaim?.text || ''}`);
+    text($('resultFeedback'), result.feedback);
+    text($('resultConfidence'), `Your confidence: ${result.confidence}%.`);
+    $('decision').classList.add('hidden'); $('results').classList.remove('hidden'); $('results').scrollIntoView({behavior:'smooth', block:'start'});
+  } catch (err) {text($('error'), err.message);} finally {submit.disabled = false;}
+});
+loadCases();
+})();
+</script>
+</body>
+</html>
