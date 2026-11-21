@@ -29,7 +29,6 @@ The application provides two interface conditions using identical predefined exp
 
 The Enhanced interface is the main intelligent interactive contribution. The Standard interface provides a baseline for future evaluation.
 
-**Planned:** User-selected academic topics, dynamic evidence retrieval, multi-turn AI coaching and comparative user testing.
 
 ## Technology and architecture
 
@@ -113,23 +112,49 @@ Backward navigation allows students to reconsider their reasoning before submitt
 
 Source summaries are author-written paraphrases rather than verbatim quotations.
 
+
 ## Testing
 
-Run the automated tests:
+### Automated testing
+
+The automated test suite was updated after removing simulated AI coaching, ensuring the tests reflect the current implementation.
+
+Run the tests using:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-Manual testing should verify:
+**Results: 6 tests passed, 0 failures (Python 3.13).**
 
-- Standard and Enhanced interface routing.
-- Consistent case content and grading.
-- Citation inspection and tracking.
-- Proactive reminders and dismissibility.
-- Backward navigation and progress preservation.
-- Live AI question generation.
-- Independent task completion when AI coaching is unavailable.
+The tests verify:
+
+- Valid answer keys for predefined cases.
+- Unique academic case identifiers.
+- Availability of academic cases.
+- Non-empty claim text.
+- Correct case indexing.
+- Valid source-to-claim relationships.
+
+**Figure 1. Automated testing results showing six passing tests.**
+
+![Six automated unit tests passed](docs/test-results.png)
+
+### Manual testing
+
+The following interactions were tested manually:
+
+| Feature | Checks performed | Result |
+|---|---|---|
+| Citation inspection | Opened the same citation twice and checked that the unique citation count increased only once. | Passed |
+| Proactive reminder | Attempted to enter Decide without inspecting citations. Tested both reviewing evidence and continuing without inspection. | Passed |
+| Navigation | Returned to earlier stages and checked that written reasoning and selections were preserved. | Passed |
+| Deterministic grading | Submitted correct and incorrect selections and compared feedback with predefined answer keys. | Passed |
+| AI coaching | Requested contextual questions using different reasoning inputs and inspected their relevance and whether they revealed the answer. | Manually inspected |
+| AI unavailability | Tested whether the activity could be completed without an AI-generated question. | Passed |
+
+These checks demonstrate that the tested interactions functioned as intended. The automated tests verify case-data consistency, while the manual checks cover interface behaviour and AI interaction. They do not establish whether students' verification accuracy improves or guarantee the suitability of every generated question.
+
 
 ## Development record
 
@@ -143,7 +168,8 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** Maintain consistent ground truth independently of LLM variability and separate correctness assessment from generative AI guidance.
 
-**Checks:** Verify that both correct and incorrect selections produce the expected feedback and that confidence ratings are accepted within the permitted range.
+**Checks:** Submitted correct and incorrect selections and compared the feedback against predefined answer keys. Automated tests also confirmed valid answer identifiers and consistent relationships between claims and sources. All six automated tests passed.
+
 
 **Commit:** [Add deterministic case data, grading API, and bounded AI prompt endpoint](https://github.com/vathavan/LLM-Citation-Evaluator/commit/17e7a9b2f407af78f7905172d5fee0ccabba2e39)
 
@@ -153,7 +179,8 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** Make supporting evidence accessible while encouraging students to evaluate individual claims independently. Source summaries are author-written paraphrases rather than verbatim quotations.
 
-**Checks:** Verify that selecting a citation displays its associated source summary and that opening the same citation repeatedly does not increase the number of unique citations inspected.
+**Checks:** Opened citations to inspect their supporting information and tested repeated citation selection. Opening the same citation twice increased the unique inspection count only once.
+
 
 **Commit:** [Build responsive student study flow, source inspector, coaching and grading UI](https://github.com/vathavan/LLM-Citation-Evaluator/commit/a77dfa76c9bd29eea75846e4615f635f9cd923e2)
 
@@ -163,7 +190,7 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** The original fixed prompts could not respond to individual reasoning. Context engineering allows guidance to be tailored to the student's input while maintaining human control. The model is instructed to generate one brief verification question without revealing the answer.
 
-**Checks:** Request questions using different reasoning inputs and assess their relevance, length and whether they reveal the correct answer.
+**Checks:** Requested verification questions using different reasoning inputs and manually inspected whether the generated questions were relevant and avoided revealing the answer. The model's output was treated as guidance rather than a guaranteed correct response.
 
 **Relevant commits:**
 
@@ -176,7 +203,8 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** The original reactive interface made evidence available but did not actively encourage its inspection. The reminder applies mixed initiative and context-sensitive timing while allowing students to dismiss the intervention and continue independently.
 
-**Checks:** Verify that the reminder appears when no citations have been opened, does not appear after citation inspection and appears only once per activity. Check both reminder options.
+**Checks:** Attempted to enter Decide without opening citations and confirmed that the reminder appeared. Tested both options: returning to inspect evidence and continuing without inspection.
+
 
 **Commit:** [Update EvidenceCheck with staged interface and AI verification features](https://github.com/vathavan/LLM-Citation-Evaluator/commit/ff591582e576c224317a87d6f8eb44f54ca9c779)
 
@@ -186,7 +214,7 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** Presenting one task at a time reduces competing information and is intended to reduce unnecessary cognitive load. Lecturer feedback emphasising visibility and reversibility informed the provision of progress indicators and opportunities to reconsider reasoning before submission.
 
-**Checks:** Navigate between stages and verify that reasoning, citation-inspection history, claim selection and confidence are preserved appropriately before submission.
+**Checks:** Navigated backwards between stages and confirmed that entered reasoning and selections were preserved, allowing students to reconsider their judgement without restarting.
 
 **Relevant commits:**
 
@@ -199,9 +227,10 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** Provide a baseline for comparison without duplicating the assessment backend. Following lecturer feedback, the Enhanced interface remains the main intelligent interactive contribution.
 
-**Checks:** Verify that both interfaces load successfully, present identical case content and provide consistent correctness feedback for identical selections.
+**Checks:** Submitted correct and incorrect claim selections and checked the resulting feedback against the predefined answer keys. Both interfaces use the same grading mechanism.
 
-**Commit:** Pending final implementation commit.
+**Commit:** [Add Standard comparison interface and remove simulated AI coaching](https://github.com/vathavan/LLM-Citation-Evaluator/commit/27c1070)
+
 
 ### 7. Removal of rule-based coaching simulation
 
@@ -209,19 +238,23 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Rationale:** Simulated coaching was initially included to demonstrate the guidance interaction without API access. However, it introduced an additional interface choice without directly contributing to the research problem. Removing it also reflects lecturer feedback on excluding unnecessary functionality.
 
-**Checks:** Verify that the simulation selector is no longer displayed, live AI coaching remains functional and students can complete the activity independently when AI assistance is unavailable.
+**Checks:** Tested live AI coaching with different reasoning inputs and confirmed that students could complete the activity without AI assistance. The automated tests were also updated to remove references to the deleted simulation function.
 
-**Commit:** Pending final implementation commit.
+**Commit:** [Add Standard comparison interface and remove simulated AI coaching](https://github.com/vathavan/LLM-Citation-Evaluator/commit/27c1070)
 
-### 8. Documentation and automated testing
+### 8. Documentation, testing and refinement
 
-**Change:** Added reproducible setup instructions, documented the intended boundaries of AI coaching and introduced automated tests.
+**Change:** Added setup instructions, documented the boundaries of AI coaching and updated the automated test suite after removing simulated coaching.
 
-**Rationale:** Improve reproducibility and make the implementation easier to inspect and evaluate.
+**Rationale:** Maintain reproducible testing and ensure that tests reflect the functionality of the current prototype.
 
-**Checks:** Run the automated test suite against the final implementation and record the results. Update any tests that still depend on the removed simulation mode.
+**Testing and refinement:** After simulated AI coaching was removed, the automated tests initially failed because `test_app.py` still imported the deleted `simulate_prompt` function. I removed the obsolete tests and introduced six checks covering case availability, unique identifiers, valid answer keys, claim content, case indexing and source-to-claim relationships.
 
-**Commit:** [Document reproducible setup, AI boundaries and development evidence; add unit tests](https://github.com/vathavan/LLM-Citation-Evaluator/commit/3ff587008d61d3d4df71bdeb99f688df55bfdb2d)
+**Result:** All six updated automated tests passed using Python 3.13. A screenshot of the successful execution is included in the Testing section.
+
+**Original testing commit:** [Document reproducible setup, AI boundaries and development evidence; add unit tests](https://github.com/vathavan/LLM-Citation-Evaluator/commit/3ff587008d61d3d4df71bdeb99f688df55bfdb2d)
+
+**Updated tests:** See the latest repository commit.
 
 ## AI assistance
 
@@ -235,6 +268,8 @@ ChatGPT was used to support application development, debugging, interface design
 | Documentation and storyboards | Assistance with README organisation and storyboard illustrations. | Created my own storyboards and scenarios but used AI to improve their visual presentation. | Compared illustrations against the final application and checked that README revisions preserved the intended content. |
 
 AI-generated suggestions were treated as development assistance rather than automatically accepted solutions. Final design decisions remained my responsibility.
+
+**Example of reviewing and adapting AI assistance:** ChatGPT supported the implementation of AI verification coaching and automated tests. However, the final design deliberately separates AI-generated guidance from correctness assessment: the LLM generates contextual verification questions, while predefined answer keys determine grading. Following the removal of simulated coaching, I also revised the automated tests because they still referenced a deleted function. The updated tests were executed successfully, demonstrating that AI-assisted code and documentation were checked and adapted rather than accepted without verification.
 
 ## Limitations and future work
 
