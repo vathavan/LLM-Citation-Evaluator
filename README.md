@@ -2,7 +2,7 @@
 
 **AI Explanation Verification Prototype**
 
-README prose word count: [Insert final word count]
+README prose word count: 1,440 words
 
 ## Project status
 
