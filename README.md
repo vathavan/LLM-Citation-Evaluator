@@ -254,7 +254,7 @@ Subsequent lecturer feedback confirmed the suitability of the proposed contribut
 
 **Original testing commit:** [Document reproducible setup, AI boundaries and development evidence; add unit tests](https://github.com/vathavan/LLM-Citation-Evaluator/commit/3ff587008d61d3d4df71bdeb99f688df55bfdb2d)
 
-**Updated tests:** See the latest repository commit.
+**Updated tests:** [Document six passing unit tests with screenshot](https://github.com/vathavan/LLM-Citation-Evaluator/commit/747fc4f)
 
 ## AI assistance
 
@@ -262,9 +262,9 @@ ChatGPT was used to support application development, debugging, interface design
 
 | Task | AI assistance | Application and adaptation | Verification |
 | --- | --- | --- | --- |
-| Backend development | Assistance with Python endpoints, case data and grading logic. | Retained deterministic grading to separate correctness assessment from AI coaching. | Check grading against predefined answer keys and run automated tests. |
-| AI verification coaching | Assistance with Groq API integration. | Restricted the intended coaching role to brief contextual questions rather than providing answers. | Inspect generated questions for relevance and unintended answer disclosure. |
-| Interface development | Suggestions for HTML, CSS, JavaScript, staged navigation and interaction tracking. | Adapted the interface to provide four stages, reversible navigation and optional guidance. | Check navigation, state preservation and citation tracking. |
+| Backend development | Assistance with Python endpoints, case data and grading logic. | Retained deterministic grading to separate correctness assessment from AI coaching. | Checked grading against predefined answer keys and run automated tests. |
+| AI verification coaching | Assistance with Groq API integration. | Restricted the intended coaching role to brief contextual questions rather than providing answers. | Inspected generated questions for relevance and unintended answer disclosure. |
+| Interface development | Suggestions for HTML, CSS, JavaScript, staged navigation and interaction tracking. | Adapted the interface to provide four stages, reversible navigation and optional guidance. | Checked navigation, state preservation and citation tracking. |
 | Documentation and storyboards | Assistance with README organisation and storyboard illustrations. | Created my own storyboards and scenarios but used AI to improve their visual presentation. | Compared illustrations against the final application and checked that README revisions preserved the intended content. |
 
 AI-generated suggestions were treated as development assistance rather than automatically accepted solutions. Final design decisions remained my responsibility.
