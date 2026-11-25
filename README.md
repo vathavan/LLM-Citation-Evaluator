@@ -2,7 +2,7 @@
 
 **AI Explanation Verification Prototype**
 
-README prose word count: 1,440 words
+README prose word count: 1,896 words
 
 ## Project status
 
@@ -262,10 +262,11 @@ ChatGPT was used to support application development, debugging, interface design
 
 | Task | AI assistance | Application and adaptation | Verification |
 | --- | --- | --- | --- |
-| Backend development | Assistance with Python endpoints, case data and grading logic. | Retained deterministic grading to separate correctness assessment from AI coaching. | Checked grading against predefined answer keys and run automated tests. |
+| Backend development | Assistance with Python endpoints, case data and grading logic. | Retained deterministic grading to separate correctness assessment from AI coaching. | Checked grading against predefined answer keys and ran automated tests. |
 | AI verification coaching | Assistance with Groq API integration. | Restricted the intended coaching role to brief contextual questions rather than providing answers. | Inspected generated questions for relevance and unintended answer disclosure. |
 | Interface development | Suggestions for HTML, CSS, JavaScript, staged navigation and interaction tracking. | Adapted the interface to provide four stages, reversible navigation and optional guidance. | Checked navigation, state preservation and citation tracking. |
 | Documentation and storyboards | Assistance with README organisation and storyboard illustrations. | Created my own storyboards and scenarios but used AI to improve their visual presentation. | Compared illustrations against the final application and checked that README revisions preserved the intended content. |
+|Report writing and editing| ChatGPT helped improve the coherence, clarity, grammar and structure of my report. | Refined explanations to make the connections between design choices, the research problem and module concepts clearer, while retaining my original decisions and reasoning. | Reviewed the revised wording against my implemented prototype, Assignment 1 literature and lecturer feedback, correcting inaccuracies and ensuring claims accurately represented the project. |
 
 AI-generated suggestions were treated as development assistance rather than automatically accepted solutions. Final design decisions remained my responsibility.
 
